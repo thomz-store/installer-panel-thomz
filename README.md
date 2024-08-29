@@ -3,7 +3,7 @@
 Gunakan script di bawah untuk menginstall thema dengan sekali copy paste saja.
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/thomz-store/installer-panel-thomz/main/install.sh)
+bash <(curl -s https://raw.githubusercontent.com/thomz-store/installer-panel-thomz/main/installer.sh)
 ```
 
 ### system support
