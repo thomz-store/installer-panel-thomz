@@ -20,6 +20,14 @@ dist="$(. /etc/os-release && echo "$ID")"
 version="$(. /etc/os-release && echo "$VERSION_ID")"
 USERPASSWORD=""
 WINGSNOQUESTIONS=false
+BLUE='\033[0;34m'       
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+CYAN2='\033[4;36m'
+NC='\033[0m'
 
 ### OUTPUTS ###
 
@@ -40,17 +48,17 @@ warning(){
 
 if [[ $EUID -ne 0 ]]; then
     echo ""
-    echo "[!] Sorry, but you need to be root to run this script."
-    echo "Most of the time this can be done by typing sudo su in your terminal"
+    echo "[!] Maaf Bang Thomz, tetapi Anda harus menjadi root untuk menjalankan skrip ini."
+    echo "Biasanya, hal ini bisa dilakukan dengan mengetikkan sudo su di terminal Anda Tuan Thomz"
     exit 1
 fi
 
 if ! [ -x "$(command -v curl)" ]; then
     echo ""
-    echo "[!] cURL is required to run this script."
-    echo "To proceed, please install cURL on your machine."
+    echo "[!] cURL diperlukan untuk menjalankan skrip ini tuan thomz."
+    echo "Untuk melanjutkan, silakan instal cURL pada mesin Anda tuan thomz."
     echo ""
-    echo "Debian based systems: apt install curl"
+    echo "Sistem berbasis Debian: apt instal curl"
     echo "CentOS: yum install curl"
     exit 1
 fi
@@ -62,7 +70,7 @@ send_summary() {
     echo ""
     
     if [ -d "/var/www/pterodactyl" ]; then
-        warning "[!] WARNING: Pterodactyl is already installed. This script will fail!"
+        warning "[!] WARNING: Pterodactyl udah keinstal tuan thomz ngapain instal lagi jadi gagal kan"
     fi
 
     echo ""
@@ -82,7 +90,7 @@ send_summary() {
     echo ""
     
     if [ "$dist" = "centos" ] && [ "$version" = "7" ]; then
-        echo "    You are running CentOS 7. NGINX will be selected as the webserver."
+        echo "    Anda menjalankan CentOS 7. NGINX akan dipilih sebagai server web."
     fi
     
     echo ""
@@ -90,7 +98,7 @@ send_summary() {
 
 panel(){
     echo ""
-    echo "[!] Before installation, we need some information."
+    echo "[!] Sebelum pemasangan, kami memerlukan beberapa informasi tuan thomz."
     echo ""
     panel_webserver
 }
@@ -98,11 +106,11 @@ panel(){
 finish(){
     clear
     cd
-    echo -e "Summary of the installation\n\nPanel URL: $FQDN\nWebserver: $WEBSERVER\nUsername: $USERNAME\nEmail: $EMAIL\nFirst name: $FIRSTNAME\nLast name: $LASTNAME\nPassword: $(printf "%0.s*" $(seq 1 ${#USERPASSWORD}))\nDatabase password: $DBPASSWORD\nPassword for Database Host: $DBPASSWORDHOST" >> panel_credentials.txt
+    echo -e "Ringkasan instalasi\n\nPanel URL: $FQDN\nWebserver: $WEBSERVER\nUsername: $USERNAME\nEmail: $EMAIL\nFirst name: $FIRSTNAME\nLast name: $LASTNAME\nPassword: $(printf "%0.s*" $(seq 1 ${#USERPASSWORD}))\nDatabase password: $DBPASSWORD\nPassword for Database Host: $DBPASSWORDHOST" >> panel_credentials.txt
 
     echo "[!] Installation of Pterodactyl Panel done"
     echo ""
-    echo "    Summary of the installation" 
+    echo "    Ringkasan instalasi" 
     echo "    Panel URL: $FQDN"
     echo "    Webserver: $WEBSERVER"
     echo "    Email: $EMAIL"
@@ -115,8 +123,8 @@ finish(){
     echo "    Database password: $DBPASSWORD"
     echo "    Password for Database Host: $DBPASSWORDHOST"
     echo "" 
-    echo "    These credentials has been saved in a file called" 
-    echo "    panel_credentials.txt in your current directory"
+    echo "    Kredensial ini telah disimpan dalam sebuah file bernama" 
+    echo "    panel_credentials.txt di direktori Anda saat ini"
     echo ""
 
     if [ "$INSTALLBOTH" = "true" ]; then
@@ -126,8 +134,8 @@ finish(){
 
     if [ "$INSTALLBOTH" = "false" ]; then
         WINGSNOQUESTIONS=false
-        echo "    Would you like to install Wings too? (Y/N)"
-        read -r -p "Do you want to install Wings? [Y/n]: " WINGS_ON_PANEL
+        echo "    Apakah Anda ingin menginstal Wings juga tuan thomz? (Y/N)"
+        read -r -p "Apakah Anda ingin menginstal Wings tuan Thomz? [Y/n]: " WINGS_ON_PANEL
 
         if [[ "$WINGS_ON_PANEL" =~ [Yy] ]]; then
             wings
@@ -143,21 +151,16 @@ finish(){
 panel_webserver(){
     send_summary
     echo "[!] Select Webserver"
-    echo "    (1) NGINX"
-    echo "    (2) Apache"
-    echo "    Input 1-2"
+    echo "    (yes/no) Pterodactyl"
+    echo "    silahkan ketik yes bang thomz"
     read -r option
     case $option in
-        1 ) option=1
-            WEBSERVER="NGINX"
-            panel_fqdn
-            ;;
-        2 ) option=2
-            WEBSERVER="Apache"
+        yes ) option=yes
+            WEBSERVER="Pterodactyl"
             panel_fqdn
             ;;
         * ) echo ""
-            echo "Please enter a valid option from 1-2"
+            echo "silahkan ketik yes bang thomz"
     esac
 }
 
@@ -359,7 +362,7 @@ panel_summary(){
     DBPASSWORD=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1`
     DBPASSWORDHOST=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1`
     echo ""
-    echo "[!] Summary:"
+    echo " =============================================== "
     echo "    Panel URL: $FQDN"
     echo "    Webserver: $WEBSERVER"
     echo "    SSL: $SSLSTATUS"
@@ -367,34 +370,38 @@ panel_summary(){
     echo "    First name: $FIRSTNAME"
     echo "    Last name: $LASTNAME"
     echo "    Password: $(printf "%0.s*" $(seq 1 ${#USERPASSWORD}))"
+    echo " =============================================== "
     echo ""
-    echo "    These credentials will be saved in a file called" 
-    echo "    panel_credentials.txt in your current directory"
+    echo "    Kredensial ini telah disimpan dalam sebuah file bernama" 
+    echo "    panel_credentials.txt di direktori Anda saat ini"
     echo "" 
-    echo "    Do you want to start the installation? (Y/N)" 
+    echo "    Lanjut Instal Panel Tuan Thomz? (Y/N)" 
     read -r PANEL_INSTALLATION
 
     if [[ "$PANEL_INSTALLATION" =~ [Yy] ]]; then
         panel_install
     fi
     if [[ "$PANEL_INSTALLATION" =~ [Nn] ]]; then
-        echo "[!] Installation has been aborted."
+        echo "[!] Instalasi telah dibatalkan."
         exit 1
     fi
 }
 
 panel_fqdn(){
     send_summary
-    echo "[!] Please enter FQDN. You will access Panel with this."
-    echo "[!] Example: panel.yourdomain.dk."
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}              MASUKAN SUBDOMAIN KAMU             ${NC}"
+    echo -e "${RED}             (panel.thomvelz.tamvan)             ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
+    echo -e "${RED} =============================================== ${NC}"
     read -r FQDN
     [ -z "$FQDN" ] && echo "FQDN can't be empty."
     IP=$(dig +short myip.opendns.com @resolver2.opendns.com -4)
     DOMAIN=$(dig +short ${FQDN})
     if [ "${IP}" != "${DOMAIN}" ]; then
         echo ""
-        echo "Your FQDN does not resolve to the IP of this machine."
-        echo "Continuing anyway in 10 seconds.. CTRL+C to stop."
+         echo "Domain Anda tidak tersambung ke IP mesin ini."
+        echo "Melanjutkannya dalam 10 detik tunggu yah ... CTRL+C untuk berhenti."
         sleep 10s
         panel_ssl
     else
@@ -404,8 +411,11 @@ panel_fqdn(){
 
 panel_ssl(){
     send_summary
-    echo "[!] Do you want to use SSL for your Panel? This is recommended. (Y/N)"
-    echo "[!] SSL is recommended for every panel."
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}                   AKTIFKAN SSL                  ${NC}"
+    echo -e "${RED}                      (Y/N)                      ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
+    echo -e "${RED} =============================================== ${NC}"
     read -r SSL_CONFIRM
 
     if [[ "$SSL_CONFIRM" =~ [Yy] ]]; then
@@ -421,10 +431,14 @@ panel_ssl(){
 panel_email(){
     send_summary
     if  [ "$SSLSTATUS" =  "true" ]; then
-        echo "[!] Please enter your email. It will be shared with Lets Encrypt and being used to setup this Panel."
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}                MASUKAN EMAIL KAMU               ${NC}"
+    echo -e "${RED}             contoh thomz@gmail.com              ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
+    echo -e "${RED} =============================================== ${NC}"
         fi
     if  [ "$SSLSTATUS" =  "false" ]; then
-        echo "[!] Please enter your email. It will used to setup this Panel."
+        echo "[!] Silakan masukkan email Anda. Ini akan digunakan untuk mengatur Panel ini."
         fi
     read -r EMAIL
     panel_username
@@ -432,27 +446,43 @@ panel_email(){
 
 panel_username(){
     send_summary
-    echo "[!] Please enter username for admin account. You can use your username to login to your Pterodactyl Account."
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}              MASUKAN USERNAME KAMU              ${NC}"
+    echo -e "${RED}                 contoh : thomz                  ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
+    echo -e "${RED} =============================================== ${NC}"
     read -r USERNAME
     panel_firstname
 }
 panel_firstname(){
     send_summary
-    echo "[!] Please enter first name for admin account."
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}             MASUKAN FIRST NAME KAMU             ${NC}"
+    echo -e "${RED}                 contoh : thomz                  ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
+    echo -e "${RED} =============================================== ${NC}"
     read -r FIRSTNAME
     panel_lastname
 }
 
 panel_lastname(){
     send_summary
-    echo "[!] Please enter last name for admin account."
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}              MASUKAN LAST NAME KAMU             ${NC}"
+    echo -e "${RED}                 contoh : thomz                  ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
+    echo -e "${RED} =============================================== ${NC}"
     read -r LASTNAME
     panel_password
 }
 
 panel_password(){
     send_summary
-    echo "[!] Please enter password for admin account."
+    echo -e "${RED} =============================================== ${NC}"
+    echo -e "${RED}              MASUKAN PASSWORD KAMU              ${NC}"
+    echo -e "${RED}                 contoh : thomz                  ${NC}"
+    echo -e "${RED}                    ©Thomvelz                    ${NC}"
+    echo -e "${RED} =============================================== ${NC}"
     local USERPASSWORD=""
     while IFS= read -r -s -n 1 char; do
         if [[ $char == $'\0' ]]; then
@@ -489,7 +519,7 @@ wings(){
     elif [ "$WINGSNOQUESTIONS" = "false" ]; then
         clear
         echo ""
-        echo "[!] Before installation, we need some information."
+        echo "[!] Sebelum pemasangan, kami memerlukan beberapa informasi."
         echo ""
         wings_fqdn
     fi
@@ -497,9 +527,9 @@ wings(){
 
 
 wings_fqdnask(){
-    echo "[!] Do you want to install a SSL certificate? (Y/N)"
-    echo "    If yes, you will be asked for an email."
-    echo "    The email will be shared with Lets Encrypt."
+    echo "[!] Apakah Anda ingin menginstal sertifikat SSL? (Y/N)"
+    echo "    Jika ya, Anda akan diminta untuk memasukkan email."
+    echo "    Email akan dibagikan dengan Lets Encrypt."
     read -r WINGS_SSL
 
     if [[ "$WINGS_SSL" =~ [Yy] ]]; then
@@ -523,7 +553,7 @@ wings_full(){
         fi
 
         if ! mkdir -p /etc/pterodactyl; then
-            echo "[!] An error occurred. Could not create directory." >&2
+            echo "[!] Terjadi kesalahan. Tidak dapat membuat direktori." >&2
             exit 1
         fi
 
@@ -537,9 +567,9 @@ wings_full(){
         chmod u+x /usr/local/bin/wings
         clear
         echo ""
-        echo "[!] Pterodactyl Wings successfully installed."
-        echo "    You still need to setup the Node"
-        echo "    on the Panel and restart Wings after."
+        echo "[!] Wings Pterodactyl berhasil dipasang."
+        echo "    Anda masih perlu menyiapkan Node"
+        echo "    Buat Node Dan Nuat Configurasi Auto Deploy."
         echo ""
 
         if [ "$INSTALLBOTH" = "true" ]; then
@@ -547,18 +577,18 @@ wings_full(){
             finish
             fi
     else
-        echo "[!] Your OS is not supported for installing Wings with this installer"
+        echo "[!] OS Anda tidak didukung untuk menginstal Wings dengan penginstal ini"
     fi
 }
 
 wings_fqdn(){
-    echo "[!] Please enter your FQDN if you want to install a SSL certificate. If not, press enter and leave this blank."
+    echo "[!] Masukkan Domain Anda Sama Dengan Domain Login jika Anda ingin menginstal sertifikat SSL. Jika tidak, tekan enter dan biarkan bagian ini kosong."
     read -r WINGS_FQDN
     IP=$(dig +short myip.opendns.com @resolver2.opendns.com -4)
     DOMAIN=$(dig +short ${WINGS_FQDN})
     if [ "${IP}" != "${DOMAIN}" ]; then
         echo ""
-        echo "FQDN canceled. Either FQDN is incorrect or you left this blank."
+        echo "Domain dibatalkan. Entah Domain salah atau Anda mengosongkan bagian ini."
         WINGS_FQDN_STATUS=false
         wings_full
     else
@@ -572,18 +602,18 @@ wings_fqdn(){
 phpmyadmin(){
     apt install dnsutils -y
     echo ""
-    echo "[!] Before installation, we need some information."
+    echo "[!] Sebelum pemasangan, kami memerlukan beberapa informasi."
     echo ""
     phpmyadmin_fqdn
 }
 
 phpmyadmin_finish(){
     cd
-    echo -e "PHPMyAdmin Installation\n\nSummary of the installation\n\nPHPMyAdmin URL: $PHPMYADMIN_FQDN\nPreselected webserver: NGINX\nSSL: $PHPMYADMIN_SSLSTATUS\nUser: $PHPMYADMIN_USER_LOCAL\nPassword: $PHPMYADMIN_PASSWORD\nEmail: $PHPMYADMIN_EMAIL" > phpmyadmin_credentials.txt
+    echo -e "PHPMyAdmin Installation\n\nRingkasan instalasi\n\nPHPMyAdmin URL: $PHPMYADMIN_FQDN\nPreselected webserver: NGINX\nSSL: $PHPMYADMIN_SSLSTATUS\nUser: $PHPMYADMIN_USER_LOCAL\nPassword: $PHPMYADMIN_PASSWORD\nEmail: $PHPMYADMIN_EMAIL" > phpmyadmin_credentials.txt
     clear
     echo "[!] Installation of PHPMyAdmin done"
     echo ""
-    echo "    Summary of the installation" 
+    echo "    Ringkasan instalasi" 
     echo "    PHPMyAdmin URL: $PHPMYADMIN_FQDN"
     echo "    Preselected webserver: NGINX"
     echo "    SSL: $PHPMYADMIN_SSLSTATUS"
@@ -699,7 +729,7 @@ phpmyadmin_summary(){
         phpmyadmininstall
     fi
     if [[ "$PHPMYADMIN_INSTALLATION" =~ [Nn] ]]; then
-        echo "[!] Installation has been aborted."
+        echo "[!] Instalasi telah dibatalkan."
         exit 1
     fi
 }
@@ -759,7 +789,7 @@ phpmyadmin_email(){
 
 wings_remove(){
     echo ""
-    echo "[!] Are you sure you want to remove Wings? If you have any servers on this machine, they will also get removed. (Y/N)"
+    echo "[!] Apakah Anda yakin ingin menghapus Wings? Jika Anda memiliki server pada mesin ini, server tersebut juga akan dihapus. (Y/N)"
     read -r UNINSTALLWINGS
 
     if [[ "$UNINSTALLWINGS" =~ [Yy] ]]; then
@@ -769,7 +799,7 @@ wings_remove(){
          rm /usr/local/bin/wings || exit || warning "Wings is not installed!" # Removes wings
          rm /etc/systemd/system/wings.service # Removes wings service file
         echo ""
-        echo "[!] Pterodactyl Wings has been uninstalled."
+        echo "[!] Wings Berhasil Di Hapus."
         echo ""
     fi
 }
@@ -794,7 +824,7 @@ removephpmyadmin(){
 
 uninstallpanel(){
     echo ""
-    echo "[!] Do you really want to delete Pterodactyl Panel? All files & configurations will be deleted. (Y/N)"
+    echo "[!] Apakah Anda benar-benar ingin menghapus Panel Pterodactyl? Semua file & konfigurasi akan dihapus loh bang thomz. (Y/N)"
     read -r UNINSTALLPANEL
 
     if [[ "$UNINSTALLPANEL" =~ [Yy] ]]; then
@@ -807,7 +837,7 @@ uninstallpanel(){
 
 uninstallpanel_backup(){
     echo ""
-    echo "[!] Do you want to keep your database and backup your .env file? (Y/N)"
+    echo "[!] Apakah Anda ingin menyimpan basis data dan mencadangkan file .env Anda? (Y/N)"
     read -r UNINSTALLPANEL_CHANGE
 
     if [[ "$UNINSTALLPANEL_CHANGE" =~ [Yy] ]]; then
@@ -831,8 +861,8 @@ uninstallpanel_confirm(){
         systemctl restart nginx
         clear
         echo ""
-        echo "[!] Pterodactyl Panel has been uninstalled."
-        echo "    Your Panel database has not been deleted"
+        echo "[!] Panel Pterodactyl telah dihapus instalasinya."
+        echo "    Database Panel Anda belum dihapus"
         echo "    and your .env file is in your current directory."
         echo ""
         fi
@@ -847,8 +877,8 @@ uninstallpanel_confirm(){
         systemctl restart nginx
         clear
         echo ""
-        echo "[!] Pterodactyl Panel has been uninstalled."
-        echo "    Files, services, configs and your database has been deleted."
+        echo "[!] Panel Pterodactyl telah dihapus instalasinya."
+        echo "    Files, services, configs, dan database data Anda telah dihapus."
         echo ""
         fi
 }
@@ -858,10 +888,10 @@ uninstallpanel_confirm(){
 switch(){
     if  [ "$SSLSWITCH" =  "true" ]; then
         echo ""
-        echo "[!] Change domains"
+        echo "[!] Mengubah domain"
         echo ""
-        echo "    The script is now changing your Pterodactyl Domain."
-        echo "      This may take a couple seconds for the SSL part, as SSL certificates are being generated."
+        echo "    Skrip sekarang mengubah Domain Pterodactyl Anda."
+        echo "      Ini mungkin memerlukan waktu beberapa detik untuk bagian SSL, karena sertifikat SSL sedang dibuat."
         rm /etc/nginx/sites-enabled/pterodactyl.conf
         curl -o /etc/nginx/sites-enabled/pterodactyl.conf https://raw.githubusercontent.com/guldkage/Pterodactyl-Installer/main/configs/pterodactyl-nginx-ssl.conf || exit || warning "Pterodactyl Panel not installed!"
         sed -i -e "s@<domain>@${DOMAINSWITCH}@g" /etc/nginx/sites-enabled/pterodactyl.conf
@@ -869,16 +899,16 @@ switch(){
         certbot certonly --standalone -d $DOMAINSWITCH --staple-ocsp --no-eff-email -m $EMAILSWITCHDOMAINS --agree-tos || exit || warning "Errors accured."
         systemctl start nginx
         echo ""
-        echo "[!] Change domains"
+        echo "[!] Mengubah domain"
         echo ""
-        echo "    Your domain has been switched to $DOMAINSWITCH"
-        echo "    This script does not update your APP URL, you can"
-        echo "    update it in /var/www/pterodactyl/.env"
+        echo "    Domain Anda telah dialihkan ke $DOMAINSWITCH"
+        echo "    Skrip ini tidak memperbarui URL APP Anda, Anda dapat"
+        echo "    perbarui di /var/www/pterodactyl/.env"
         echo ""
-        echo "    If using Cloudflare certifiates for your Panel, please read this:"
-        echo "    The script uses Lets Encrypt to complete the change of your domain,"
-        echo "    if you normally use Cloudflare Certificates,"
-        echo "    you can change it manually in its config which is in the same place as before."
+        echo "    Jika menggunakan sertifikasi Cloudflare untuk Panel Anda, silakan baca ini:"
+        echo "    Skrip menggunakan Lets Encrypt untuk menyelesaikan perubahan domain Anda,"
+        echo "    jika Anda biasanya menggunakan Sertifikat Cloudflare,"
+        echo "    Anda dapat mengubahnya secara manual dalam konfigurasinya yang berada di tempat yang sama seperti sebelumnya."
         echo ""
         fi
     if  [ "$SSLSWITCH" =  "false" ]; then
@@ -888,33 +918,33 @@ switch(){
         sed -i -e "s@<domain>@${DOMAINSWITCH}@g" /etc/nginx/sites-enabled/pterodactyl.conf
         systemctl restart nginx
         echo ""
-        echo "[!] Change domains"
+        echo "[!] Mengubah domain"
         echo ""
-        echo "    Your domain has been switched to $DOMAINSWITCH"
-        echo "    This script does not update your APP URL, you can"
-        echo "    update it in /var/www/pterodactyl/.env"
+        echo "    Domain Anda telah dialihkan ke $DOMAINSWITCH"
+        echo "    Skrip ini tidak memperbarui URL APP Anda, Anda dapat"
+        echo "    perbarui di /var/www/pterodactyl/.env"
         fi
 }
 
 switchemail(){
     echo ""
-    echo "[!] Change domains"
-    echo "    To install your new domain certificate to your Panel, your email address must be shared with Let's Encrypt."
-    echo "    They will send you an email when your certificate is about to expire. A certificate lasts 90 days at a time and you can renew your certificates for free and easily, even with this script."
+    echo "[!] Mengubah domain"
+    echo "    Untuk menginstal sertifikat domain baru Anda ke Panel, alamat email Anda harus dibagikan dengan Let's Encrypt."
+    echo "    Mereka akan mengirimi Anda email ketika sertifikat Anda akan kedaluwarsa. Sertifikat berlaku selama 90 hari dan Anda dapat memperbarui sertifikat Anda secara gratis dan mudah, bahkan dengan skrip ini."
     echo ""
-    echo "    When you created your certificate for your panel before, they also asked you for your email address. It's the exact same thing here, with your new domain."
-    echo "    Therefore, enter your email. If you do not feel like giving your email, then the script can not continue. Press CTRL + C to exit."
+    echo "    Saat Anda membuat sertifikat untuk panel Anda sebelumnya, mereka juga meminta alamat email Anda. Hal yang sama persis sama di sini, dengan domain baru Anda."
+    echo "    Oleh karena itu, masukkan email Anda. Jika Anda tidak ingin memberikan email Anda, maka skrip tidak dapat dilanjutkan. Tekan CTRL + C untuk keluar."
     echo ""
-    echo "      Please enter your email"
+    echo "      Masukan Email Anda Thomz"
 
     read -r EMAILSWITCHDOMAINS
     switch
 }
 
 switchssl(){
-    echo "[!] Select the one that describes your situation best"
-    warning "   [1] I want SSL on my Panel on my new domain"
-    warning "   [2] I don't want SSL on my Panel on my new domain"
+    echo "[!] Pilih salah satu yang paling menggambarkan situasi Anda"
+    warning "   [1] Saya ingin SSL di Panel pada domain baru saya"
+    warning "   [2] Saya tidak ingin SSL pada Panel di domain baru saya"
     read -r option
     case $option in
         1 ) option=1
@@ -932,8 +962,8 @@ switchssl(){
 
 switchdomains(){
     echo ""
-    echo "[!] Change domains"
-    echo "    Please enter the domain (panel.mydomain.ltd) you want to switch to."
+    echo "[!] Mengubah domain"
+    echo "    Masukkan domain (panel.thomvelz.tamvan) yang ingin Anda alihkan."
     read -r DOMAINSWITCH
     switchssl
 }
@@ -954,14 +984,16 @@ oscheck(){
 
 options(){
     if [ "$dist" = "centos" ] && { [ "$version" = "7" ]; }; then
-        echo "Your opportunities has been limited due to CentOS 7."
-        echo ""
-        echo "What would you like to do?"
+        echo "Kesempatan Anda menjadi terbatas karena CentOS."
+    echo -e "${YELOW} =============================================== ${NC}"
+    echo -e "${YELOW}           AUTO INSTAL PANEL BY THOMZ            ${NC}"
+    echo -e "${YELOW}                    ©Thomvelz                    ${NC}"
+    echo -e "${YELOW} =============================================== ${NC}"
+        echo "Apa yang ingin Anda lakukan Tuan Thomz?"
         echo "[1] Install Panel."
         echo "[2] Install Wings."
         echo "[3] Remove Panel."
         echo "[4] Remove Wings."
-        echo "Input 1-4"
         read -r option
         case $option in
             1 ) option=1
@@ -979,19 +1011,21 @@ options(){
                 wings_remove
                 ;;
             * ) echo ""
-                echo "Please enter a valid option from 1-4"
+                echo "Silakan masukkan opsi yang valid from 1-4"
         esac
     else
-        echo "What would you like to do?"
-        echo "[1] Install Panel"
-        echo "[2] Install Wings"
-        echo "[3] Panel & Wings"
-        echo "[4] Install PHPMyAdmin"
-        echo "[5] Remove PHPMyAdmin"
-        echo "[6] Remove Wings"
-        echo "[7] Remove Panel"
-        echo "[8] Switch Pterodactyl Domain"
-        echo "Input 1-8"
+    echo -e "${CYAN2} =============================================== ${NC}"
+    echo -e "${CYAN2}           AUTO INSTAL PANEL BY THOMZ            ${NC}"
+    echo -e "${CYAN2}                    ©Thomvelz                    ${NC}"
+    echo -e "${CYAN2} =============================================== ${NC}"
+    echo ""
+    echo -e "${RED} 1 Install Panel ${NC}"
+    echo -e "${BLUE} 2 Install Wings ${NC}"
+    echo -e "${CYAN} 3 Panel Dan Wings ${NC}"
+    echo -e "${GREEN} 4 Hapus wings ${NC}"
+    echo -e "${PURPLE} 5 Hapus Panel ${NC}"
+    echo -e "${YELOW} 6 Ganti Domain ${NC}"
+        echo "Input 1-6"
         read -r option
         case $option in
             1 ) option=1
@@ -1007,22 +1041,16 @@ options(){
                 panel
                 ;;
             4 ) option=4
-                phpmyadmin
-                ;;
-            5 ) option=5
-                removephpmyadmin
-                ;;
-            6 ) option=6
                 wings_remove
                 ;;
-            7 ) option=7
+            5 ) option=5
                 uninstallpanel
                 ;;
-            8 ) option=8
+            6 ) option=6
                 switchdomains
                 ;;
             * ) echo ""
-                echo "Please enter a valid option from 1-8"
+                echo "Silakan masukkan opsi yang valid from 1-6"
         esac
     fi
 }
