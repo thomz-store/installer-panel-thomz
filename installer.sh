@@ -26,7 +26,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
-CYAN2='\033[4;36m'
+CYAN2='\033[1;36m'
 NC='\033[0m'
 
 ### OUTPUTS ###
@@ -1059,10 +1059,10 @@ options(){
 
 clear
 echo ""
-echo "Pterodactyl Installer @ v2.1"
-echo "Copyright 2024, Malthe K, <me@malthe.cc>"
-echo "https://github.com/guldkage/Pterodactyl-Installer"
-echo ""
-echo "This script is not associated with the official Pterodactyl Panel."
+echo "Project By Thomz @ v1"
+echo "Copyright 2024, thomvelz, <thomvelz.live>"
+echo "Youtube : thomvelz"
+echo "WA 1 : 6283834510927"
+echo "WA 2 : 6289603693479"
 echo ""
 oscheck
