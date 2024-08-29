@@ -22,7 +22,7 @@ version="$(. /etc/os-release && echo "$VERSION_ID")"
 finish(){
     clear
     echo ""
-    echo "[!] Panel installed."
+    echo "[!] Panel Berhasil Terinstal."
     echo ""
 }
 
@@ -123,15 +123,16 @@ PASSWORD=`echo $7`
 WINGS=`echo $8`
 
 if [ -z "$FQDN" ] || [ -z "$SSL" ] || [ -z "$EMAIL" ] || [ -z "$USERNAME" ] || [ -z "$FIRSTNAME" ] || [ -z "$LASTNAME" ] || [ -z "$PASSWORD" ] || [ -z "$WINGS" ]; then
-    echo "Error! THe usage of this script is incorrect."
+    echo "Kesalahan! Penggunaan skrip ini salah.
     exit 1
 fi
 
 echo "Checking your OS.."
 if { [ "$dist" = "ubuntu" ] && [ "$version" = "20.04" ]; } || { [ "$dist" = "debian" ] && [ "$version" = "11" ] || [ "$version" = "12" ]; }; then
-    echo "Welcome to Autoinstall of Pterodactyl Panel"
-    echo "Quick summary before the install begins:"
+    echo "Selamat datang di Pemasangan Otomatis Panel Pterodactyl"
+    echo "Ringkasan singkat sebelum penginstalan dimulai:"
     echo ""
+    echo "==============================================="
     echo "FQDN (URL): $FQDN"
     echo "SSL: $SSL"
     echo "Preselected webserver: NGINX"
@@ -141,8 +142,9 @@ if { [ "$dist" = "ubuntu" ] && [ "$version" = "20.04" ]; } || { [ "$dist" = "deb
     echo "Last name $LASTNAME"
     echo "Password: $PASSWORD"
     echo "Wings install: $WINGS"
+    echo "==============================================="
     echo ""
-    echo "Starting automatic installation in 5 seconds"
+    echo "Memulai pemasangan otomatis dalam 5 detik"
     sleep 5s
     panel_install
 else
