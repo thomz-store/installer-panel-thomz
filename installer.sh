@@ -151,12 +151,12 @@ finish(){
 panel_webserver(){
     send_summary
     echo "[!] Select Webserver"
-    echo "    (yes/no) Pterodactyl"
+    echo "    (yes/no) NGINX"
     echo "    silahkan ketik yes bang thomz"
     read -r option
     case $option in
         yes ) option=yes
-            WEBSERVER="Pterodactyl"
+            WEBSERVER="NGINX"
             panel_fqdn
             ;;
         * ) echo ""
