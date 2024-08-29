@@ -1024,7 +1024,7 @@ options(){
     echo -e "${CYAN} 3 Panel Dan Wings ${NC}"
     echo -e "${GREEN} 4 Hapus wings ${NC}"
     echo -e "${PURPLE} 5 Hapus Panel ${NC}"
-    echo -e "${YELOW} 6 Ganti Domain ${NC}"
+    echo -e "${YELLOW} 6 Ganti Domain ${NC}"
         echo "Input 1-6"
         read -r option
         case $option in
